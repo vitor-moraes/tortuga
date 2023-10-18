@@ -16,8 +16,10 @@ Including another URLconf
 
 from django.conf.urls import url, include
 from django.contrib import admin
+from .views import home, save, edit
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^core/', include('core.urls'))
+    url(r'^$', home, name='home'),
+    url(r'^save/', save, name='save'),
+    url(r'^edit/<int:user_id>/', edit, name='edit'),
 ]
