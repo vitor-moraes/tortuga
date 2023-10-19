@@ -1,0 +1,33 @@
+version: "3.6"
+
+volumes:
+  rails_database:
+    name: rails_database
+    driver: local
+
+services:
+  app:
+    image: tortuga-backend:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWD: postgres
+      RAILS_MASTER_KEY: <%= ENV.fetch("RAILS_MASTER_KEY") {""} %>
+    ports:
+      - 3000:3000
+  postgres:
+    image: postgres:14
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432
+    volumes:
+      - rails_database:/var/lib/postgresql/data
+    environment:
+      # default user
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
