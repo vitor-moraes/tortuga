@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  nature: MyString
+  days_in_week: MyString
+  times_in_day: MyString
+
+two:
+  name: MyString
+  nature: MyString
+  days_in_week: MyString
+  times_in_day: MyString
