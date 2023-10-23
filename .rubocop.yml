@@ -1,0 +1,4 @@
+AllCops:
+  EnabledByDefault: true
+Style/Copyright:
+  Enabled: true
