@@ -1,5 +1,10 @@
 version: "3.6"
 
+networks:
+  tortuga-network:
+    name: 'tortuga-network'
+    driver: 'bridge'
+
 volumes:
   rails_database:
     name: rails_database
@@ -8,12 +13,17 @@ volumes:
 services:
   app:
     image: tortuga-backend:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWD: postgres
-      RAILS_MASTER_KEY: <%= ENV.fetch("RAILS_MASTER_KEY") {""} %>
+    env_file:
+      - .env
+    # environment:
+    #   POSTGRES_USER: "${DATABASE_USER}"
+    #   POSTGRES_PASSWD: "${DATABASE_PASSWORD}"
+    #   RAILS_MASTER_KEY: "${RAILS_MASTER_KEY}"
     ports:
       - 3000:3000
+    networks:
+      - tortuga-network
+      
   postgres:
     image: postgres:14
     restart: always
@@ -27,7 +37,8 @@ services:
     volumes:
       - rails_database:/var/lib/postgresql/data
     environment:
-      # default user
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: "${DATABASE}"
+      POSTGRES_USER: "${DATABASE_USER}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+    networks:
+      - tortuga-network
