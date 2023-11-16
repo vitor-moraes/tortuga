@@ -1,24 +1,2 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Tortuga's Backend
+An app that helps you create healthy habits and destroy bad habits. It notifies you daily and has habit modules (reading, studying, exercising, sleeping, eating). It assesses what you are or are not able to do and indicates new times based on your registered routine. There will be a module for habits you want to build and another for habits you want to stop having. The data will be used to suggest new moments for habits, the user can register their ideal and current routine.
