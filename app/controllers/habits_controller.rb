@@ -1,5 +1,9 @@
-class HabitsController < ApplicationController
+# frozen_string_literal: true
 
-def index
-    @habits = Habit.all
+# Documentation
+class HabitsController < ApplicationController
+  # Documentation
+  def index
+    @habits = ::Habit.all
+  end
 end

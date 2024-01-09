@@ -11,6 +11,15 @@
   </head>
 
   <body>
-    <%= yield %>
+    <h1>Habits</h1>
+    <ul>
+      <% @habits.each do |habit| %>
+        <li>
+          <a href="/habits/<%= habit.id %>">
+            <%= habit.name %>
+          </a>
+        </li>
+      <% end %>
+    </ul>
   </body>
 </html>
