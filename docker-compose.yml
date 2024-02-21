@@ -6,39 +6,44 @@ networks:
     driver: 'bridge'
 
 volumes:
-  rails_database:
-    name: rails_database
+  tortuga-rails-database:
+    name: tortuga-rails-database
+    driver: local
+  tortuga-bundle-cache:
+    name: tortuga-bundle-cache
     driver: local
 
 services:
-  app:
-    image: tortuga-backend:latest
-    env_file:
-      - .env
-    # environment:
-    #   POSTGRES_USER: "${DATABASE_USER}"
-    #   POSTGRES_PASSWD: "${DATABASE_PASSWORD}"
-    #   RAILS_MASTER_KEY: "${RAILS_MASTER_KEY}"
-    ports:
-      - 3000:3000
-    networks:
-      - tortuga-network
-      
   postgres:
     image: postgres:14
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     ports:
       - 5432:5432
     volumes:
-      - rails_database:/var/lib/postgresql/data
+      - tortuga-rails-database:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: "${DATABASE}"
       POSTGRES_USER: "${DATABASE_USER}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
     networks:
       - tortuga-network
+
+  app:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    image: tortuga-backend:latest
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    networks:
+      - tortuga-network
+    environment:
+      DATABASE: "${DATABASE}"
+      DATABASE_USER: "${DATABASE_USER}"
+      DATABASE_PASSWORD: "${DATABASE_PASSWORD}"
+      RAILS_ENV: "${RAILS_ENV}"
+
