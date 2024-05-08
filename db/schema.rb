@@ -10,17 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_19_225938) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_08_194147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "habits", force: :cascade do |t|
     t.string "name", null: false
     t.string "nature", default: "good"
-    t.string "days_in_week", default: [], array: true
-    t.string "times_in_day", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "schedules", force: :cascade do |t|
+    t.datetime "recurrence_start"
+    t.datetime "recurrence_end"
+    t.string "type"
+    t.integer "day_of_week"
+    t.integer "month"
+    t.integer "day_of_month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "habit_id"
+  end
+
+  add_foreign_key "schedules", "habits"
 end
