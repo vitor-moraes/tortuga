@@ -1,0 +1,27 @@
+# docker-compose.yml
+version: '3.8'
+
+networks:
+  tortuga-network:
+    name: 'tortuga-network'
+    driver: 'bridge'
+
+volumes:
+  postgres:
+      name: tortuga-database
+      driver: local
+
+services:
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: "${DATABASE}"
+      POSTGRES_USER: "${DATABASE_USER}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - tortuga-network
