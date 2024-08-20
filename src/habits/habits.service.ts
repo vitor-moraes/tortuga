@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateHabitDto } from './dto/create-habit.dto';
 import { UpdateHabitDto } from './dto/update-habit.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class HabitsService {
@@ -13,9 +14,25 @@ export class HabitsService {
       ))
   }
 
-  create(createHabitDto: CreateHabitDto) {
-    return 'This action adds a new habit';
-  }
+  async create(createHabitDto: CreateHabitDto) {
+    const { name, description, type, schedule_info } = createHabitDto;
+    const habitData: Prisma.HabitCreateInput = {
+      name,
+      description,
+      type,
+      schedule: {
+          create: {
+            recurrenceStart: schedule_info.recurrenceStart,
+            recurrenceEnd: schedule_info.recurrenceEnd,
+            type: schedule_info.type,
+            dayOfTheWeek: schedule_info.dayOfTheWeek,
+            month: schedule_info.month,
+            dayOfMonth: schedule_info.dayOfMonth,
+          },
+        },
+    };
+  return this.transformBigInt(await this.prisma.habit.create({ data: habitData }));
+}
   
   async findAll() {
     const habits = await this.prisma.habit.findMany({
